@@ -52,16 +52,8 @@
           } else {
               //check the db that username selected is not already in use
               if ($key == "signupUsername") {
-                  $user = 'root';
-                  $password = '';
-                  $db = 'secret_diary_db';
 
-                  $link = mysqli_connect('localhost', $user, $password, $db);
-                  $error = mysqli_connect_error();
-                  if ($error) {
-                      //echo $error;
-                      die("Unable to connect");
-                  }
+                  include('secret_diary_db_connection.php');
 
                   $_signupUsername = mysqli_real_escape_string($link, $value);
                   $query = "SELECT `Username` FROM `users` WHERE `Username` = '".$_signupUsername."'";
@@ -88,17 +80,9 @@
       //evaluate the error and errorCounter
       if ($_POST["userSignUp"] == "1") {
           if ($signupError == "" && $signupErrorCounter == 0) {
-              //echo "<p>Signup Successful</p>";
-              $user = 'root';
-              $password = '';
-              $db = 'secret_diary_db';
 
-              $link = mysqli_connect('localhost', $user, $password, $db);
-              $error = mysqli_connect_error();
-              if ($error) {
-                  //echo $error;
-                  die("Unable to connect");
-              }
+              //echo "<p>Signup Successful</p>";
+              include('secret_diary_db_connection.php');
 
               $escapedAttributes = array();
               foreach ($attributes as $key => $value) {
@@ -149,16 +133,8 @@
           }
       } elseif ($_POST["userSignUp"] == "0") {
           if ($loginError == "" && $loginErrorCounter == 0) {
-              $user = 'root';
-              $password = '';
-              $db = 'secret_diary_db';
 
-              $link = mysqli_connect('localhost', $user, $password, $db);
-              $error = mysqli_connect_error();
-              if ($error) {
-                  //echo $error;
-                  die("Unable to connect");
-              }
+              include('secret_diary_db_connection.php');
 
               $escapedAttributes = array();
               foreach ($attributes as $key => $value) {
@@ -218,76 +194,15 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="assets/css/bootstrap.css">
-    <link rel="stylesheet" href="assets/css/fonts.css">
-    <script src="assets/js/popper.js"></script>
-    <script src="assets/js/bootstrap-jquery.js"></script>
-    <script src="assets/js/bootstrap.js"></script>
-    <style>
-
-      html {
-        background: url("assets/images/secret_forest.jpg") no-repeat center center fixed;
-        -webkit-background-size: cover;
-        -moz-background-size: cover;
-        -o-background-size: cover;
-        background-size: cover;
-      }
-
-      .container {
-        margin-top: 3em;
-        margin-left: auto;
-        margin-right: auto;
-        width: 60%;
-        text-align: center;
-      }
-
-      body {
-        background: none;
-      }
-
-
-      h1 {
-        margin-bottom: 1em;
-        color: #FFFFFF;
-      }
-
-      label {
-        color: #FFFFFF;
-      }
-
-      .alert {
-        text-align: left;
-      }
-
-      #loginFieldset {
-        display: none;
-      }
-
-      #showLoginFieldset, #showSignupFieldset {
-        font-size: 2em;
-        color: #FFFFFF;
-      }
-
-      #login, #sign_up {
-        margin-left: auto;
-        margin-right: auto;
-        width: 40%;
-      }
-
-      .form-group.center {
-        text-align: center;
-        margin-top: 2em;
-      }
-
-    </style>
+    <?php include('header.php'); ?>
   </head>
   <body>
-    <div class="container">
+    <div class="container home-page">
+      <h1>Secret Diary</h1>
+      <p style="color: #FFFFFF;">Store your thoughts permanently and securely</p>
+      <p style="color: #FFFFFF;">Interested? Sign Up now!</p>
       <fieldset id="signupFieldset">
         <div id="errorMessage"><?php echo $signupError.$signupSuccess; ?></div>
-        <h1>Sign Up</h1>
         <form action="secret_diary.php" method="post" id="signupForm">
           <div class="form-group">
             <input type="text" name="signupUsername" id="signupUsername" placeholder="Username" class="form-control">
@@ -304,15 +219,12 @@
           </div>
           <input type="hidden" name="userSignUp" value="1">
           <div class="form-group center">
-            <input type="submit" name="signUp" value="Sign Up" id="signUp" class="btn btn-primary">
+            <input type="submit" name="signUp" value="Sign Up" id="signUp" class="btn btn-success">
           </div>
         </form>
       </fieldset>
-      <p><a id="showLoginFieldset">Log In</a></p>
-      <p><a id="showSignupFieldset">Sign Up</a></p>
       <fieldset id="loginFieldset">
         <div id="errorMessage"><?php echo $loginError.$loginSuccess; ?></div>
-        <h1>Log In</h1>
         <form action="secret_diary.php" method="post" id="loginForm">
           <div class="form-group">
             <input type="text" name="loginUsername" id="loginUsername" placeholder="Username" class="form-control">
@@ -320,47 +232,20 @@
           <div class="form-group">
             <input type="password" name="loginPassword" id="loginPassword" placeholder="Password" class="form-control">
           </div>
-          <!--<div class="form-group">
-            <label for="confirmPassword">Confirm Password</label>
-            <input type="password" name="signupPasswordConfirmation" id="signupPasswordConfirmation" class="form-control">
-          </div> -->
-          <!--<div class="form--group">
-            <label for="stayLoggedIn">Stay Logged In</label>
-            <input type="checkbox" name="stayLoggedIn" id="stayLoggedIn" value="1" class="form-control">
-          </div> -->
           <input type="hidden" name="userSignUp" value="0">
           <div class="checkbox">
             <input type="checkbox" name="stayLoggedInLogIn" id="stayLoggedInLogIn">
             <label for="stayLoggedInLogIn">Stay Logged In</label>
           </div>
           <div class="form-group center">
-            <input type="submit" name="logIn" value="Log In" id="logIn" class="btn btn-primary">
+            <input type="submit" name="logIn" value="Log In" id="logIn" class="btn btn-success">
           </div>
         </form>
       </fieldset>
+      <div style="margin-top: 2em;">
+        <p style="color: #FFFFFF;"><button id="showSignUp" class="btn btn-primary">Sign Up</button> or <button id="showLogIn">Log In</button></p>
+      </div>
     </div>
-    <!--
-    <div class="container">
-      <h1>Log In</h1>
-      <div id="errorMessage"></div>
-      <form action="secret_diary.php" method="post" id="loginForm">
-        <div class="form-group">
-          <label for="loginUsername">Username</label>
-          <input type="text" name="loginUsername" id="loginUsername" class="form-control">
-        </div>
-        <div class="form-group">
-          <label for="loginPassword">Password</label>
-          <input type="password" name="loginPassword" id="loginPassword" class="form-control">
-        </div>
-        <label for="stayLoggedIn">Stay Logged In</label>
-        <input type="checkbox" name="stayLoggedIn" id="stayLoggedIn" value="1" class="form-control">
-        <div class="form-group center">
-          <input type="submit" value="Log In" name="logIn" id="logIn" class="btn btn-primary">
-        </div>
-      </form>
-    </div>
-  -->
   </body>
-  <script>
-  </script>
+  <?php include('footer.php'); ?>
 </html>
